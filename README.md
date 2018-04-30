@@ -286,9 +286,9 @@ In DSE FS, create a directory called `/data/` that contains a directory called `
 ```
 $ dse fs
 dsefs dsefs://127.0.0.1:5598/ > mkdir /data/
-dsefs dsefs://127.0.0.1:5598/ > mkdir /data/fraud/
-dsefs dsefs://127.0.0.1:5598/ > exit
-$ dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
+dse fs "mkdir /data"
+dse fs "mkdir /data/fraud"
+dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
 ```
 
 ### Preprocess data

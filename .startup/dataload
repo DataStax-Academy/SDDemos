@@ -5,21 +5,28 @@ curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_l
 
 # create Cassandra Schema
 if [ `hostname` == 'node0' ]
-then
-  cqlsh -f cql_schema.cql node0
+    then
+        cqlsh -f cql_schema.cql node0
+elif [ `hostname` == 'node1' ]
+    then
+        cqlsh -f cql_schema.cql node1
 fi
 
 # extract SSTables to data directory
-pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-rm -f /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz
 if [ `hostname` == 'node0' ]
-then
-  sleep 60
-  nodetool repair simplegeo locations
+    then
+        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
+elif [ `hostname` == 'node1' ]
+    then
+        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 fi
 
+# Repair data
+  sleep 60
+  nodetool repair simplegeo locations
+
 # create core and reindex
-if [ `hostname` == 'node0' ]
-then
   dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
-fi
+
+# Cleanup
+rm -f /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz
