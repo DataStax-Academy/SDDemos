@@ -1,39 +1,7 @@
 #!/bin/bash
 set -x
 exec 2> /tmp/debugoutgraph
-# configure DSEFS
 
-cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
 
-# Make sure there are no conflics in schema
-gremlin-console -e "system.graph('KillrVideo').drop();"
 
-dse gremlin-console -e schema.groovy
-
-# repair all keyspaces
-
-if [ `hostname` == 'node0' ]
-    then
-        ssh node1 nodetool repair
-        sleep 300
-        ssh node2 nodetool repair
-elif [ `hostname` == 'node1' ]
-    then
-        ssh node2 nodetool repair
-        sleep 300
-        ssh node3 nodetool repair
-fi
-
-# unpack the file here
-
-dse fs "mkdir /data"
-dse fs "mkdir /data/fraud"
-dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-
-dse spark-submit preprocess_data.py
-
-dse spark-submit pyspark_loader.py
 
