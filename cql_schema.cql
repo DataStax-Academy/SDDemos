@@ -1,4 +1,4 @@
-CREATE KEYSPACE simplegeo WITH replication = {'class': 'NetworkTopologyStrategy', ‘DC1’: '3'};
+CREATE KEYSPACE simplegeo WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1': 3};
 
 CREATE TABLE simplegeo.locations (
     id text PRIMARY KEY,

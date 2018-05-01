@@ -31,35 +31,33 @@ curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_l
 # extract SSTables to data directory
 if [ `hostname` == 'node0' ]
     then
-        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
+        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 elif [ `hostname` == 'node1' ]
     then
-        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
+        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 fi
+sleep 60
 
 # setup graph data
-dse fs "mkdir /data"
-dse fs "mkdir /data/fraud"
-dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-
-dse spark-submit preprocess_data.py
-
-dse spark-submit pyspark_loader.py
+# dse fs "mkdir /data"
+# dse fs "mkdir /data/fraud"
+# dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
+# dse spark-submit preprocess_data.py
+# dse spark-submit pyspark_loader.py
 
 # Repair data
-sleep 60
-if [ `hostname` == 'node0' ]
-    then
-        ssh node1 nodetool repair
-        sleep 300
-        ssh node2 nodetool repair
-elif [ `hostname` == 'node1' ]
-    then
-        ssh node2 nodetool repair
-        sleep 300
-        ssh node3 nodetool repair
-fi
-sleep 60
+#if [ `hostname` == 'node0' ]
+#    then
+#        ssh node1 nodetool repair
+#        sleep 300
+#        ssh node2 nodetool repair
+#elif [ `hostname` == 'node1' ]
+#    then
+#        ssh node2 nodetool repair
+#        sleep 300
+#        ssh node3 nodetool repair
+#fi
+#sleep 60
 #nodetool upgradesstables
 #if [ `hostname` == 'node0' ]
 #    then
@@ -75,5 +73,5 @@ sleep 60
   dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
 
 # Cleanup
-rm -f /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz
-rm -f /tmp/geofinder-api/put PS_20174392719_1491204439457_log.csv
+rm -f /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz
+# rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv

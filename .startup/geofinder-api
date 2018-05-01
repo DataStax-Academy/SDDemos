@@ -6,9 +6,11 @@ apt-get install -y maven
 mvn clean package
 if [ `hostname` == 'node0' ]
     then
-      nohup java -jar target/geofinder-api.jar -h node0 &
+        nohup java -jar target/geofinder-api.jar -h node0 &
+      # nohup java -jar target/geofinder-api.jar -h node0 2> /tmp/geolog &
 elif [ `hostname` == 'node1' ]
     then
       nohup java -jar target/geofinder-api.jar -h node1 &
+      # nohup java -jar target/geofinder-api.jar -h node1 2> /tmp/geolog &
 fi
 
