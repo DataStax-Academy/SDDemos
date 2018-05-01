@@ -4,12 +4,8 @@ exec 2> /tmp/debugoutnotebooks
 # create Cassandra Schema
 if [ `hostname` == 'node0' ]
     then
-        cp /tmp/SDDemos/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar /tmp/datastax-studio*/examples/
-        cp /tmp/SDDemos/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar /tmp/datastax-studio*/examples/
-        cp /tmp/SDDemos/KillrVideo_QuickStart_2018-04-27_15_09_05.studio-nb.tar /tmp/datastax-studio*/examples/
+        cp /tmp/SDDemos/*-nb.tar /tmp/datastax-studio*/examples/
 elif [ `hostname` == 'node1' ]
     then
-        cp /tmp/SDDemos/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar /tmp/datastax-studio*/examples/
-        cp /tmp/SDDemos/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar /tmp/datastax-studio*/examples/
-        cp /tmp/SDDemos/KillrVideo_QuickStart_2018-04-27_15_09_05.studio-nb.tar /tmp/datastax-studio*/examples/
+        cp /tmp/SDDemos/*-nb.tar /tmp/datastax-studio*/examples/
 fi
