@@ -4,10 +4,10 @@ set -x
 exec 2> /tmp/debugoutdataload
 
 # configure analytics and DSEFS
-cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
-cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
+cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
+cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
+cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
+cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
 
 # Make sure there are no conflics in schema
 gremlin-console -e "system.graph('KillrVideo').drop();"
