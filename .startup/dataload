@@ -4,11 +4,6 @@ set -x
 exec 2> /tmp/debugoutdataload
 
 # configure analytics and DSEFS
-cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
-cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
-cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};"
-
 # Make sure there are no conflics in schema
 gremlin-console -e "system.graph('KillrVideo').drop();"
 
@@ -18,9 +13,18 @@ dse gremlin-console -e schema.groovy
 if [ `hostname` == 'node0' ]
     then
         cqlsh -f cql_schema.cql node0
+        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
+        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
+        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
+        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
+
 elif [ `hostname` == 'node1' ]
     then
         cqlsh -f cql_schema.cql node1
+        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
+        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
+        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
+        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
 fi
 
 # download SSTables from s3
@@ -46,6 +50,7 @@ sleep 60
 # dse spark-submit pyspark_loader.py
 
 # Repair data
+nodetool repair
 #if [ `hostname` == 'node0' ]
 #    then
 #        ssh node1 nodetool repair
