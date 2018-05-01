@@ -1,5 +1,6 @@
 #!/bin/bash
-
+set -x
+exec 2> /tmp/debugoutgraph
 # configure DSEFS
 
 cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'dc1' : 3};"
@@ -17,10 +18,12 @@ dse gremlin-console -e schema.groovy
 if [ `hostname` == 'node0' ]
     then
         ssh node1 nodetool repair
+        sleep 300
         ssh node2 nodetool repair
 elif [ `hostname` == 'node1' ]
     then
         ssh node2 nodetool repair
+        sleep 300
         ssh node3 nodetool repair
 fi
 

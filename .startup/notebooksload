@@ -1,32 +1,15 @@
 #!/bin/bash
-
-# download SSTables from s3
-curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_locations_SSTables-DSE5.1.tgz'
-
+set -x
+exec 2> /tmp/debugoutnotebooks
 # create Cassandra Schema
 if [ `hostname` == 'node0' ]
     then
-        cqlsh -f cql_schema.cql node0
+        cp /tmp/SDDemos/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar /tmp/*studio*/examples/
+        cp /tmp/SDDemos/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar /tmp/*studio*/examples/
+        cp /tmp/SDDemos/KillrVideo_QuickStart_2018-04-27_15_09_05.studio-nb.tar /tmp/*studio*/examples/
 elif [ `hostname` == 'node1' ]
     then
-        cqlsh -f cql_schema.cql node1
+        cp /tmp/SDDemos/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar /tmp/*studio*/examples/
+        cp /tmp/SDDemos/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar /tmp/*studio*/examples/
+        cp /tmp/SDDemos/KillrVideo_QuickStart_2018-04-27_15_09_05.studio-nb.tar /tmp/*studio*/examples/
 fi
-
-# extract SSTables to data directory
-if [ `hostname` == 'node0' ]
-    then
-        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-elif [ `hostname` == 'node1' ]
-    then
-        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-fi
-
-# Repair data
-  sleep 60
-  nodetool repair simplegeo locations
-
-# create core and reindex
-  dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
-
-# Cleanup
-rm -f /tmp/geofinder-api/simplegeo_locations_SSTables-DSE5.1.tgz

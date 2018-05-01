@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+exec 2> /tmp/debugoutdataload
+
 # download SSTables from s3
 curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_locations_SSTables-DSE5.1.tgz'
 
@@ -22,8 +25,19 @@ elif [ `hostname` == 'node1' ]
 fi
 
 # Repair data
-  sleep 60
-  nodetool repair simplegeo locations
+sleep 60
+nodetool repair simplegeo locations
+sleep 60
+nodetool upgradesstables
+if [ `hostname` == 'node0' ]
+    then
+        ssh node1 nodetool upgradesstables
+        ssh node2 nodetool upgradesstables
+elif [ `hostname` == 'node1' ]
+    then
+        ssh node2 nodetool upgradesstables
+        ssh node3 nodetool upgradesstables
+fi
 
 # create core and reindex
   dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
