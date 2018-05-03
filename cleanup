@@ -3,79 +3,27 @@
 set -x
 exec 2> /tmp/debugoutdataload
 
-# Make sure there are no conflics in schema
-gremlin-console -e "system.graph('KillrVideo').drop();"
+ps -ef | grep geofinder-api | grep -v grep | awk '{print $2}' | xargs kill
 
-dse gremlin-console -e schema.groovy
+if [gremlin-console -e "system.graph('fraud').exists()"]
+    then
+        gremlin-console -e "system.graph('fraud').drop();"
+fi
 
-# create Cassandra Schema
 if [ `hostname` == 'node0' ]
     then
-        cqlsh -f cql_schema.cql node0
-        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
+        cqlsh -e "DROP KEYSPACE simplegeo;" node0
 
 elif [ `hostname` == 'node1' ]
     then
-        cqlsh -f cql_schema.cql node1
-        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
+        cqlsh -e "DROP KEYSPACE simplegeo;" node1
 fi
 
-# download SSTables from s3
-curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_locations_SSTables-DSE5.1.tgz'
-
-# download and unpack the CSV for graph
-
-# extract SSTables to data directory
-if [ `hostname` == 'node0' ]
-    then
-        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-elif [ `hostname` == 'node1' ]
-    then
-        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-fi
-sleep 60
+rm -rf /var/lib/cassandra/data/simplegeo
 
 # setup graph data
-# dse fs "mkdir /data"
-# dse fs "mkdir /data/fraud"
-# dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-# dse spark-submit preprocess_data.py
-# dse spark-submit pyspark_loader.py
-
-# Repair data
-nodetool repair
-#if [ `hostname` == 'node0' ]
-#    then
-#        ssh node1 nodetool repair
-#        sleep 300
-#        ssh node2 nodetool repair
-#elif [ `hostname` == 'node1' ]
-#    then
-#        ssh node2 nodetool repair
-#        sleep 300
-#        ssh node3 nodetool repair
-#fi
-#sleep 60
-#nodetool upgradesstables
-#if [ `hostname` == 'node0' ]
-#    then
-#        ssh node1 nodetool upgradesstables
-#        ssh node2 nodetool upgradesstables
-#elif [ `hostname` == 'node1' ]
-#    then
-#        ssh node2 nodetool upgradesstables
-#        ssh node3 nodetool upgradesstables
-#fi
-
-# create core and reindex
-  dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
+# dse fs "rm -r /data"
 
 # Cleanup
 rm -f /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz
-# rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv
+rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv
