@@ -12,11 +12,11 @@ fi
 
 if [ `hostname` == 'node0' ]
     then
-        cqlsh -e "DROP KEYSPACE simplegeo;" node0
+        cqlsh -e "DROP KEYSPACE IF EXISTS simplegeo;" node0
 
 elif [ `hostname` == 'node1' ]
     then
-        cqlsh -e "DROP KEYSPACE simplegeo;" node1
+        cqlsh -e "DROP KEYSPACE IF EXISTS simplegeo;" node1
 fi
 
 rm -rf /var/lib/cassandra/data/simplegeo
