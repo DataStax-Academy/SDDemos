@@ -1,5 +1,8 @@
 #!/bin/bash
 
+set -x
+exec 2> /tmp/debugoutgeo
+
 echo "standing up geofinder-api"
 #standup the geofinder-api
 apt-get install -y maven
