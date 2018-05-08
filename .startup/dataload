@@ -47,17 +47,17 @@ sleep 60
 
 # Repair data
 nodetool repair
-#if [ `hostname` == 'node0' ]
-#    then
-#        ssh node1 nodetool repair
-#        sleep 300
-#        ssh node2 nodetool repair
-#elif [ `hostname` == 'node1' ]
-#    then
-#        ssh node2 nodetool repair
-#        sleep 300
-#        ssh node3 nodetool repair
-#fi
+if [ `hostname` == 'node0' ]
+    then
+        ssh node1 nodetool repair
+        sleep 300
+        ssh node2 nodetool repair
+elif [ `hostname` == 'node1' ]
+    then
+        ssh node2 nodetool repair
+        sleep 300
+        ssh node3 nodetool repair
+fi
 #sleep 60
 #nodetool upgradesstables
 #if [ `hostname` == 'node0' ]
