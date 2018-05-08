@@ -1,4 +1,3 @@
-
 ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};
 ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};
 ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};
