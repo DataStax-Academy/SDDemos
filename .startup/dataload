@@ -9,24 +9,16 @@ if [dse gremlin-console -e "system.graph('KillrVideo').exists()"]
         dse gremlin-console -e "system.graph('KillrVideo').drop();"
 fi
 
-dse gremlin-console -e schema.groovy
+# dse gremlin-console -e schema.groovy
 
 # create Cassandra Schema
 if [ `hostname` == 'node0' ]
     then
         cqlsh -f cql_schema.cql node0
-        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
-        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node0
 
 elif [ `hostname` == 'node1' ]
     then
         cqlsh -f cql_schema.cql node1
-        cqlsh -e "ALTER  KEYSPACE dse_analytics WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE dse_leases WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE dsefs WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
-        cqlsh -e "ALTER  KEYSPACE HiveMetaStore WITH REPLICATION = { 'class' : 'NetworkTopologyStrategy',  'DC1' : 3};" node1
 fi
 
 # download SSTables from s3
