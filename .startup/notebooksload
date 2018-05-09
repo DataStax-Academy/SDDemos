@@ -4,8 +4,8 @@ exec 2> /tmp/debugoutnotebooks
 # create Cassandra Schema
 if [ `hostname` == 'node0' ]
     then
-        pushd /tmp/datastax-studio*/; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+        pushd /root/.datastax_studio/; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
 elif [ `hostname` == 'node1' ]
     then
-        pushd /tmp/datastax-studio*/; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+        pushd /root/.datastax_studio/; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
 fi
