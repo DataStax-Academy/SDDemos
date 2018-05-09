@@ -20,10 +20,12 @@ dse gremlin-console -e schema.groovy
 if [ `hostname` == 'node0' ]
     then
         cqlsh -f cql_schema.cql node0
+        sleep 100
         pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 elif [ `hostname` == 'node1' ]
     then
         cqlsh -f cql_schema.cql node1
+        sleep 100
         pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 fi
 sleep 60
