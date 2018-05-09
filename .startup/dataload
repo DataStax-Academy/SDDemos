@@ -30,11 +30,11 @@ curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_l
 if [ `hostname` == 'node0' ]
     then
         mkdir -p /mnt/ephemeral/cassandra/data/simplegeo/locations
-        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
+        pushd /mnt/ephemeral/cassandra/data/simplegeo/locations; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 elif [ `hostname` == 'node1' ]
     then
         mkdir -p /var/lib/cassandra/data/simplegeo/locations
-        pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
+        pushd /var/lib/cassandra/data/simplegeo/locations; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 fi
 sleep 60
 
