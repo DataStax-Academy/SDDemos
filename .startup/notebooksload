@@ -1,11 +1,16 @@
 #!/bin/bash
 set -x
 exec 2> /tmp/debugoutnotebooks
-# create Cassandra Schema
+# the studio folder gets unpacked into correct location
 if [ `hostname` == 'node0' ]
     then
         pushd /; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
 elif [ `hostname` == 'node1' ]
     then
-        pushd /; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+        pushd /home/ubuntu; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+        mv /home/ubuntu/root/* /home/ubuntu/
 fi
+ps -ef | grep datastax-studio | grep -v grep | awk '{print $2}' | xargs kill
+sleep 10
+cd /tmp/datastax-studio-*
+bin/server.sh &
