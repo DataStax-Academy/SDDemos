@@ -10,7 +10,7 @@ elif [ `hostname` == 'node1' ]
         pushd /home/ubuntu; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
         mv /home/ubuntu/root/* /home/ubuntu/
 fi
-ps -ef | grep datastax-studio | grep -v grep | awk '{print $2}' | xargs kill
+ps -ef | grep studio-server | grep -v grep | awk '{print $2}' | xargs kill
 sleep 10
 cd /tmp/datastax-studio-*
 bin/server.sh &
