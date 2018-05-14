@@ -66,3 +66,40 @@ fi
 # Cleanup
 rm -f /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz
 # rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv
+
+mkdir /tmp/SDDemos/backup
+# pushd /tmp/SDDemos/backup; curl -L -o fraud_graph.tar https://www.dropbox.com/s/qqnzptho9mnlbez/fraud_graph.tar?dl=0; tar -zxvf fraud_graph.tar; popd
+
+pushd /tmp/SDDemos/backup; wget -O fraud_graph.tar https://www.dropbox.com/s/qqnzptho9mnlbez/fraud_graph.tar?dl=0; tar -zxvf fraud_graph.tar; popd
+
+
+# Name of opscenter backup
+TAG=
+
+# get cluster configs
+#CLUSTERNAME = curl http://127.0.0.1:8888/cluster-configs | awk '{print $1}'
+#echo $CLUSTERNAME
+
+
+CLUSTERNAME = Cluster_1
+
+curl http://127.0.0.1:8888/Cluster_1/backups | awk '{print $1}'
+curl http://127.0.0.1:8888/Cluster_1/backups/graphs/
+
+
+# get list of all backups pertaining to the graph
+# KEYSPACESARRAY = curl http://127.0.0.1:8888/{ClusterName}/backups/graphs/$TAG
+
+#for i in "${KEYSPACESARRAY[@]}"
+#do
+#   :
+#   curl -X POST
+#    http://127.0.0.1:8888/$CLUSTERNAME/backups/restore/$TAG/$i
+#    -d '{
+#      "throttle": 10,
+#      "column-families: ["users", "dates"],
+#      "truncate": true
+#    }'
+#done
+
+
