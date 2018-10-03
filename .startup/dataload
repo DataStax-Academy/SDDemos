@@ -39,8 +39,6 @@ dse spark-submit pyspark_loader.py
 
 # Repair data
 nodetool repair
-sleep 60
-nodetool upgradesstables
 sleep 300
 if [ `hostname` == 'node0' ]
     then
@@ -60,6 +58,8 @@ elif [ `hostname` == 'node1' ]
         ssh node2 nodetool upgradesstables
         ssh node3 nodetool upgradesstables
 fi
+nodetool upgradesstables
+sleep 60
 
 # create core and reindex
   dsetool create_core simplegeo.locations schema=schema.xml solrconfig=solrconfig.xml reindex=true distributed=true
