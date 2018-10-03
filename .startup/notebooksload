@@ -1,16 +1,42 @@
 #!/bin/bash
 set -x
 exec 2> /tmp/debugoutnotebooks
-# the studio folder gets unpacked into correct location
-if [ `hostname` == 'node0' ]
-    then
-        pushd /; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
-elif [ `hostname` == 'node1' ]
-    then
-        pushd /home/ubuntu; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
-        mv /home/ubuntu/root/* /home/ubuntu/
+
+#Get content
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar'
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar'
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Core_Cassandra_First_Touch_2018-10-03_18_17_16.studio-nb.tar'
+
+
+# Fetch IP Address
+IP=$(ifconfig | awk '/inet/ { print $2 }' | egrep -v '^fe|^127|^192|^172|::' | head -1)
+IP=${IP#addr:}
+
+if [[ $HOSTNAME == "node"* ]] ; then
+    #rightscale
+    IP=$(grep $(hostname)_ext /etc/hosts | awk '{print $1}')
 fi
-ps -ef | grep studio-server | grep -v grep | awk '{print $2}' | xargs kill
-sleep 10
-cd /tmp/datastax-studio-*
-bin/server.sh &
+
+FILENAME1=Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar
+FILENAME2=DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar
+FILENAME3=Core_Cassandra_First_Touch_2018-10-03_18_17_16.studio-nb.tar
+
+curl -H "Accept-Encoding: gzip" -X POST -F 'file=@'$FILENAME1 http://"$IP":9091/api/v1/notebooks/import &> /dev/null
+curl -H "Accept-Encoding: gzip" -X POST -F 'file=@'$FILENAME2 http://"$IP":9091/api/v1/notebooks/import &> /dev/null
+curl -H "Accept-Encoding: gzip" -X POST -F 'file=@'$FILENAME3 http://"$IP":9091/api/v1/notebooks/import &> /dev/null
+
+
+#lagecy code 
+# the studio folder gets unpacked into correct location
+# if [ `hostname` == 'node0' ]
+#     then
+#         pushd /; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+# elif [ `hostname` == 'node1' ]
+#     then
+#         pushd /home/ubuntu; tar -zxvf /tmp/SDDemos/notebooks.tar; popd
+#         mv /home/ubuntu/root/* /home/ubuntu/
+# fi
+# ps -ef | grep studio-server | grep -v grep | awk '{print $2}' | xargs kill
+# sleep 10
+# cd /tmp/datastax-studio-*
+# bin/server.sh &
