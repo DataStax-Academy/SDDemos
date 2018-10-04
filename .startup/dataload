@@ -50,7 +50,6 @@ if [ `hostname` == 'node0' ]
         ssh node2 nodetool upgradesstables
 elif [ `hostname` == 'developer-day-node1' ]
     then
-
         ssh node2 nodetool repair
         sleep 300
         ssh node3 nodetool repair
