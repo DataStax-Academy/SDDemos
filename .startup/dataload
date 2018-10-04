@@ -51,9 +51,9 @@ if [ `hostname` == 'node0' ]
 elif [ `hostname` == 'developer-day-node1' ]
     then
 
-        ssh developer-day-node2 nodetool repair
+        ssh node2 nodetool repair
         sleep 300
-        ssh developer-day-node3 nodetool repair
+        ssh node3 nodetool repair
         sleep 60
         ssh developer-day-node2 nodetool upgradesstables
         ssh developer-day-node3 nodetool upgradesstables
