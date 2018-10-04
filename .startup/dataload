@@ -23,19 +23,19 @@ if [ `hostname` == 'node0' ]
     then
         cqlsh -f cql_schema.cql node0
         pushd /mnt/ephemeral/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
-elif [ `hostname` == 'node1' ]
+elif [ `hostname` == 'developer-day-node1' ]
     then
-        cqlsh -f cql_schema.cql node1
+        cqlsh -f cql_schema.cql developer-day-node1
         pushd /var/lib/cassandra/data/simplegeo/locations*; tar -zxvf /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz; nodetool refresh simplegeo locations; popd
 fi
 sleep 60
 
 # setup graph data
-dse fs "mkdir /data"
-dse fs "mkdir /data/fraud"
-dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-dse spark-submit preprocess_data.py
-dse spark-submit pyspark_loader.py
+# dse fs "mkdir /data"
+# dse fs "mkdir /data/fraud"
+# dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
+# dse spark-submit preprocess_data.py
+# dse spark-submit pyspark_loader.py
 
 # Repair data
 nodetool repair
@@ -48,15 +48,15 @@ if [ `hostname` == 'node0' ]
         sleep 60
         ssh node1 nodetool upgradesstables
         ssh node2 nodetool upgradesstables
-elif [ `hostname` == 'node1' ]
+elif [ `hostname` == 'developer-day-node1' ]
     then
 
-        ssh node2 nodetool repair
+        ssh developer-day-node2 nodetool repair
         sleep 300
-        ssh node3 nodetool repair
+        ssh developer-day-node3 nodetool repair
         sleep 60
-        ssh node2 nodetool upgradesstables
-        ssh node3 nodetool upgradesstables
+        ssh developer-day-node2 nodetool upgradesstables
+        ssh developer-day-node3 nodetool upgradesstables
 fi
 nodetool upgradesstables
 sleep 60
