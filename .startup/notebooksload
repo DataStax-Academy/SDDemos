@@ -2,6 +2,15 @@
 set -x
 exec 2> /tmp/debugoutnotebooks
 
+
+ps -ef | grep studio-server | grep -v grep | awk '{print $2}' | xargs kill
+sleep 10
+rm -rf ~/.datastax_studio
+
+cd /tmp/datastax-studio-*
+bin/server.sh &
+sleep 50
+
 #Get content
 curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Working_with_SparkSQL_v6.0.0_2018-04-27_15_09_08.studio-nb.tar'
 curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/DSE_Graph_Example_Fraud_2018-03-01_05_08_40.studio-nb.tar'
