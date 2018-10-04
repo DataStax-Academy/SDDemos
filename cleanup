@@ -14,7 +14,7 @@ if [ `hostname` == 'node0' ]
     then
         cqlsh -e "DROP KEYSPACE IF EXISTS simplegeo;" node0
 
-elif [ `hostname` == 'node1' ]
+elif [ `hostname` == 'developer-day-node1' ]
     then
         cqlsh -e "DROP KEYSPACE IF EXISTS simplegeo;" node1
 fi
