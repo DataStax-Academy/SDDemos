@@ -6,9 +6,7 @@ exec 2> /tmp/debugoutnotebooks
 ps -ef | grep studio-server | grep -v grep | awk '{print $2}' | xargs kill
 sleep 10
 rm -rf ~/.datastax_studio
-
-cd /tmp/datastax-studio-*
-bin/server.sh &
+pushd /tmp/datastax-studio-*; bin/server.sh &; popd
 sleep 50
 
 #Get content
