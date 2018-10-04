@@ -31,11 +31,11 @@ fi
 sleep 60
 
 # setup graph data
-# dse fs "mkdir /data"
-# dse fs "mkdir /data/fraud"
-# dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-# dse spark-submit preprocess_data.py
-# dse spark-submit pyspark_loader.py
+dse fs "mkdir /data"
+dse fs "mkdir /data/fraud"
+dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
+dse spark-submit preprocess_data.py
+dse spark-submit pyspark_loader.py
 
 # Repair data
 nodetool repair
