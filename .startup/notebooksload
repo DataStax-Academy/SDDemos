@@ -11,10 +11,14 @@ exec 2> /tmp/debugoutnotebooks
 # cd /tmp/SDDemos
 # sleep 50
 
+FILENAME1=Dev_Day_Core_Cassandra_First_Touch.tar
+FILENAME2=Dev_Day_DSE_Graph_Example_Fraud.tar
+FILENAME3=Dev_Day_Working_with_SparkSQL.tar
+
 #Get content
-curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Dev_Day_Core_Cassandra_First_Touch.tar'
-curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Dev_Day_DSE_Graph_Example_Fraud.studio-nb.tar'
-curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/Dev_Day_Working_with_SparkSQL.studio-nb.tar'
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/'$FILENAME1
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/'$FILENAME2
+curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/'$FILENAME3
 
 
 # Fetch IP Address
@@ -25,10 +29,6 @@ if [[ $HOSTNAME == "node"* ]] ; then
     #rightscale
     IP=$(grep $(hostname)_ext /etc/hosts | awk '{print $1}')
 fi
-
-FILENAME1=Dev_Day_Core_Cassandra_First_Touch.tar
-FILENAME2=Dev_Day_DSE_Graph_Example_Fraud.studio-nb.tar
-FILENAME3=Dev_Day_Working_with_SparkSQL.studio-nb.tar
 
 curl -H "Accept-Encoding: gzip" -X POST -F 'file=@'$FILENAME1 http://"$IP":9091/api/v1/notebooks/import &> /dev/null
 curl -H "Accept-Encoding: gzip" -X POST -F 'file=@'$FILENAME2 http://"$IP":9091/api/v1/notebooks/import &> /dev/null
