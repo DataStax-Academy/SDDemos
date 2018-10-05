@@ -42,20 +42,20 @@ nodetool repair
 sleep 300
 if [ `hostname` == 'node0' ]
     then
-        ssh node1 nodetool repair
+        ssh -oStrictHostKeyChecking=no node1 nodetool repair
         sleep 300
-        ssh node2 nodetool repair
+        ssh -oStrictHostKeyChecking=no node2 nodetool repair
         sleep 60
-        ssh node1 nodetool upgradesstables
-        ssh node2 nodetool upgradesstables
+        ssh -oStrictHostKeyChecking=no node1 nodetool upgradesstables
+        ssh -oStrictHostKeyChecking=no node2 nodetool upgradesstables
 elif [ `hostname` == 'developer-day-node1' ]
     then
-        ssh node2 nodetool repair
+        ssh -oStrictHostKeyChecking=no node2 nodetool repair
         sleep 300
-        ssh node3 nodetool repair
+        ssh -oStrictHostKeyChecking=no node3 nodetool repair
         sleep 60
-        ssh node2 nodetool upgradesstables
-        ssh node3 nodetool upgradesstables
+        ssh -oStrictHostKeyChecking=no node2 nodetool upgradesstables
+        ssh -oStrictHostKeyChecking=no node3 nodetool upgradesstables
 fi
 nodetool upgradesstables
 sleep 60
