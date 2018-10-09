@@ -1,4 +1,4 @@
-## Overview
+# Overview
 This is a demo made up of three seperate ones and is intended to be used in datastax developer days.
 
 It includes:
@@ -6,11 +6,8 @@ It includes:
 * DSE Anylytics notebook that uses spark SQL.
 * Graph Notebook that showcases DSE Graph basic usage.
 
-# Instructions
-
+# Instructions/Project setup
 To set up the demo:
-
-# Project setup
 ```
 cd /tmp
 git clone https://github.com/mando222/SDDemos.git
@@ -33,5 +30,5 @@ http://node0_ip:9000
 If you are running this from the dsa scripts, you will need to point your web browser at:
 http://node1_ip:9000
 
-# DSE Graph and Analytics Demos
+## DSE Graph and Analytics Demos
 Start exploring using DataStax Studio 6!
