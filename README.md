@@ -7,6 +7,10 @@ It includes:
 * Graph Notebook that showcases DSE Graph basic usage.
 
 # Instructions/Project setup
+
+If using assethub use at least a m3.2xLarge cluster 
+If using the dsa scripts use command `python dsa-ec2.py start YOURCLUSTERNAME 1 -c developer-day -t m5.2xlarge` replaceing the cluster name with the one you want. 
+
 To set up the demo:
 ```
 cd /tmp
