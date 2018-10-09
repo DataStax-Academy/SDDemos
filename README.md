@@ -7,10 +7,10 @@ It includes:
 * Graph Notebook that showcases DSE Graph basic usage.
 
 # Instructions/Project setup
-* If using assethub use at least a m3.2xLarge cluster.
+* If using AssetHub use at least a m3.2xLarge cluster.
 * If using the dsa scripts use command `python dsa-ec2.py start YOURCLUSTERNAME 1 -c developer-day -t m5.2xlarge` replaceing the cluster name with the one you want. 
 
-To set up the demo:
+To set up the demo on a dsa instance:
 ```
 cd /tmp
 git clone https://github.com/mando222/SDDemos.git
@@ -20,6 +20,7 @@ sudo ./startup all
 # Start geo app
 java -jar target/geofinder-api.jar -h node1
 ```
+The AssetHub version should work without user setup commands.
 
 ## Search Demo
 This is a simple web app to demonstrate some of the geospatial capabilities in DSE.  It is not meant to be a demonstration of how to build a REST API. I used the [spark java framework](http://sparkjava.com/) (not to be confused with Apache Spark) for its lean and simple approach.
