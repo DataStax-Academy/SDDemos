@@ -21,9 +21,6 @@ sudo ./startup all
 java -jar target/geofinder-api.jar -h node1
 ```
 
-
-
-
 ## Search Demo
 This is a simple web app to demonstrate some of the geospatial capabilities in DSE.  It is not meant to be a demonstration of how to build a REST API. I used the [spark java framework](http://sparkjava.com/) (not to be confused with Apache Spark) for its lean and simple approach.
 
@@ -33,8 +30,8 @@ If you are running this from assethub, you will need to point your web browser a
 
 http://node0_ip:9000
 
-# DSE Graph Demo
+If you are running this from the dsa scripts, you will need to point your web browser at:
+http://node1_ip:9000
 
-DSE Graph eamples of loading data and analytics.
-
-## Start exploring using DataStax Studio 6!
+# DSE Graph and Analytics Demos
+Start exploring using DataStax Studio 6!
