@@ -5,7 +5,7 @@ exec 2> /tmp/debugoutdataload
 
 # download SSTables from s3
 curl -O 'https://s3-us-west-1.amazonaws.com/fieldops-public-download/simplegeo_locations_SSTables-DSE5.1.tgz'
-curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/PS_20174392719_1491204439457_log.csv'
+# curl -O 'https://s3.amazonaws.com/datastaxtraining/OverviewSession/PS_20174392719_1491204439457_log.csv'
 sleep 100
 
 # Make sure there are no conflicts in schema
@@ -16,7 +16,7 @@ fi
 
 # download and unpack the CSV for graph
 
-dse gremlin-console -e schema.groovy
+# dse gremlin-console -e schema.groovy
 
 # extract SSTables to data directory
 if [ `hostname` == 'node0' ]
@@ -31,11 +31,11 @@ fi
 sleep 60
 
 # setup graph data
-dse fs "mkdir /data"
-dse fs "mkdir /data/fraud"
-dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
-dse spark-submit preprocess_data.py
-dse spark-submit pyspark_loader.py
+# dse fs "mkdir /data"
+# dse fs "mkdir /data/fraud"
+# dse fs "put PS_20174392719_1491204439457_log.csv /data/fraud/transactions.csv"
+# dse spark-submit preprocess_data.py
+# dse spark-submit pyspark_loader.py
 
 # Repair data
 nodetool repair
@@ -65,4 +65,4 @@ sleep 60
 
 # Cleanup
 rm -f /tmp/SDDemos/simplegeo_locations_SSTables-DSE5.1.tgz
-rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv
+# rm -f /tmp/SDDemos/put PS_20174392719_1491204439457_log.csv
